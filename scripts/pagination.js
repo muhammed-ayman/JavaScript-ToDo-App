@@ -1,3 +1,12 @@
+// REMOVE ALL PAGINATION BUTTONS ::
+export const removePaginationBtns = () => {
+  let rows = document.querySelectorAll('#todo-pagination-ul > li');
+  for (var i = 0; i < rows.length; i++) {
+    rows[i].remove();
+  }
+}
+
+
 // REMOVE ALL PAGES ::
 export const removePages = (tableId) => {
   let rows = document.querySelectorAll(`#${tableId} > tbody > tr`);
@@ -31,6 +40,7 @@ export const addPaginationBtn = (btnId) => {
 
 // THE GENERAL PAGINATION FUNCTION ::
 export const paginate = (tableId, elementsPerPage) =>{
+  removePaginationBtns();
   let rows = document.querySelectorAll(`#${tableId} > tbody > tr`);
   let counter = 0;
   let id = 1;
