@@ -3,87 +3,34 @@
    <head>
      <meta charset="utf-8">
      <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
-     <title>ToDo</title>
+     <link rel="stylesheet" href="css/style.css">
+     <title>Todo App</title>
    </head>
    <body>
 
      <!-- Header -->
      <div class="header">
-       <p id='tit'>JS ToDo App</p>
+       <p id='tit'>JS Todo App</p>
      </div>
 
      <!-- Content -->
      <div class="content">
        <div class="todo-head">
-         <input type="text" name="todo-input" placeholder="Enter..." id="todo-input">
+         <input type="text" name="todo-input" placeholder="Finish homework..." id="todo-input">
          <button type="button" name="todo-btn" id="todo-btn"><i class="fa fa-plus"></i></button>
        </div>
        <div class="todo-content">
-         <table id="todo-content-table">
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-           <tr>
-             <td>Study Math</td>
-             <td><button type="button" name="task-delete"><i class="fa fa-remove"></i></button></td>
-           </tr>
-         </table>
+             <ul class="todo-list">
+               <!-- <div class="todo-item">
+                 <li>Study Math</li>
+                 <button type="button" class="check-btn"><li class="fa fa-check"></li></button>
+                 <button type="button" class="trash-btn"><li class="fa fa-trash"></li></button>
+               </div> -->
+             </ul>
        </div>
        <div class="todo-content-footer">
          <ul id="todo-pagination-ul">
+           <li><button type="button" value='1' class="pagination-btn">1</button></li>
          </ul>
        </div>
      </div>

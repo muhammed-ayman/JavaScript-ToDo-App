@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*:focus {
+    outline: none;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  min-height: 100vh;
+  background-color:  #581845;
+  color: #fff;
+}
+
+.header {
+  font-size: 1.6rem;
+}
+
+.header, .todo-head {
+  min-height: 18vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#todo-input, #todo-btn {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: none;
+  background: white;
+  margin: 0.2rem;
+  height: 3rem;
+  width: 3rem;
+}
+
+#todo-input {
+  width: 20rem;
+}
+
+#todo-btn {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#todo-btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+.todo-content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.todo-list{
+  min-width: 30%;
+  list-style: none;
+}
+.todo-item{
+  margin: 0.5rem;
+  background-color: #fff;
+  color: #000;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.todo-item li{
+  flex: 1;
+  padding: 0rem 0.5rem;
+}
+.fa-trash, .fa-check {
+  pointer-events: none;
+}
+.check-btn,.trash-btn{
+  background-color: red;
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.check-btn{
+  background-color: green;
+}
+
+.todo-content-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#todo-pagination-ul{
+  margin-top: 2rem;
+  min-width: 30%;
+  list-style: none;
+}
+
+#todo-pagination-ul li{
+  padding: 0rem 0.5rem;
+  display: inline;
+}
+
+#todo-pagination-ul li button{
+  cursor: pointer;
+  border: none;
+  background-color: #fff;
+  color: #000;
+  font-size: 1rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  width: 1.2rem;
+}
