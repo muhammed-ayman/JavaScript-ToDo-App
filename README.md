@@ -1,3 +1,3 @@
 # JavaScript ToDo App
 
-This is a ToDo app built with JavaScript
+This is a Todo app built with JavaScript
