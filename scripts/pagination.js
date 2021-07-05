@@ -38,7 +38,7 @@ export const addPaginationBtn = (btnId, todoItemSelector) => {
 }
 
 // THE GENERAL PAGINATION FUNCTION ::
-export const paginate = (todoItemSelector, elementsPerPage) =>{
+export const paginate = (todoItemSelector, elementsPerPage) => {
   removePaginationBtns();
   let rows = document.querySelectorAll(`${todoItemSelector}`);
   let counter = 0;
