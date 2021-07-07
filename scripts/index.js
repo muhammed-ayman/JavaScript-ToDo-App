@@ -8,6 +8,7 @@ const todoInput = document.getElementById('todo-input');
 const todoBtn = document.getElementById('todo-btn');
 const todoList = document.getElementsByClassName('todo-list')[0];
 const trashBtns = document.getElementsByClassName('trash-btn');
+const statusSelectionList = document.getElementsByClassName('tasks-status')[0];
 
 // GENERAL VARIABLES ::
 let tasks = {"completed":[],"uncompleted":[]}
@@ -20,14 +21,38 @@ showPage('1',todoItemSelector);
 
 // EVENTS ::
 todoBtn.addEventListener('click', getTodoInput);
+statusSelectionList.addEventListener('change', changeStatusOption)
 
 // FUNCTIONS ::
+function changeStatusOption() {
+  changeFilter(statusSelectionList.value);
+}
+
+
 function emptyTodoInput() {
   todoInput.value = '';
 }
 
 function emptyTasksList() {
   todoList.innerHTML = '';
+}
+
+function addCompletedTask(todo) {
+  const todoItemDiv = document.createElement('div');
+  todoItemDiv.setAttribute('class', 'todo-item');
+  const todoItemLi = document.createElement('li');
+  todoItemLi.innerHTML = todo;
+  const todoItemTrashBtn = document.createElement('button');
+  todoItemTrashBtn.setAttribute('class','trash-btn');
+  todoItemTrashBtn.innerHTML = '<li class="fa fa-trash"></li>';
+  todoItemTrashBtn.addEventListener('click', function() {
+    deleteCompletedTask(event);
+  });
+  todoItemDiv.appendChild(todoItemLi);
+  todoItemDiv.appendChild(todoItemTrashBtn);
+  todoList.insertBefore(todoItemDiv, todoList.childNodes[0]);
+  paginate(todoItemSelector,elementsPerPage);
+  showPage('1',todoItemSelector);
 }
 
 function addTask(todo) {
@@ -38,6 +63,9 @@ function addTask(todo) {
   const todoItemCheckBtn = document.createElement('button');
   todoItemCheckBtn.setAttribute('class','check-btn');
   todoItemCheckBtn.innerHTML = '<li class="fa fa-check"></li>';
+  todoItemCheckBtn.addEventListener('click', function() {
+    finishTask(event);
+  });
   const todoItemTrashBtn = document.createElement('button');
   todoItemTrashBtn.setAttribute('class','trash-btn');
   todoItemTrashBtn.innerHTML = '<li class="fa fa-trash"></li>';
@@ -52,6 +80,18 @@ function addTask(todo) {
   showPage('1',todoItemSelector);
 }
 
+function deleteCompletedTask(e) {
+  for (var i = 0; i < todoList.childNodes.length; i++) {
+    if (todoList.childNodes[i] == e.target.parentNode) {
+      tasks['completed'].splice(tasks['completed'].length-1-i,1);
+      e.target.parentNode.remove();
+      paginate(todoItemSelector,elementsPerPage);
+      showPage('1',todoItemSelector);
+      break;
+    }
+  }
+}
+
 function deleteTask(e) {
   for (var i = 0; i < todoList.childNodes.length; i++) {
     if (todoList.childNodes[i] == e.target.parentNode) {
@@ -59,17 +99,30 @@ function deleteTask(e) {
       e.target.parentNode.remove();
       paginate(todoItemSelector,elementsPerPage);
       showPage('1',todoItemSelector);
+      break;
+    }
+  }
+}
+
+function finishTask(e) {
+  for (var i = 0; i < todoList.childNodes.length; i++) {
+    if (todoList.childNodes[i] == e.target.parentNode) {
+      tasks['completed'].push(tasks['uncompleted'][tasks['uncompleted'].length-1-i]);
+      tasks['uncompleted'].splice(tasks['uncompleted'].length-1-i,1);
+      e.target.parentNode.remove();
+      break;
     }
   }
 }
 
 function changeFilter(filter) {
+  statusSelectionList.value = filter;
   emptyTasksList();
+  let uncompletedArrLength = tasks['uncompleted'].length;
+  let completedArrLength = tasks['completed'].length;
   if (filter == 'all') {
-    let uncompletedArrLength = tasks['uncompleted'].length;
-    let completedArrLength = tasks['completed'].length;
     for (var i = 0; i < completedArrLength; i++) {
-      addTask(tasks['completed'][i]);
+      addCompletedTask(tasks['completed'][i]);
     }
     for (var i = 0; i < uncompletedArrLength; i++) {
       addTask(tasks['uncompleted'][i]);
@@ -80,7 +133,7 @@ function changeFilter(filter) {
     }
   } else {
     for (var i = 0; i < completedArrLength; i++) {
-      addTask(tasks['completed'][i]);
+      addCompletedTask(tasks['completed'][i]);
     }
   }
 }
