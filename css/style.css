@@ -52,6 +52,15 @@ body {
   color: #fff;
 }
 
+.tasks-status {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  padding: 0.7rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
 .todo-content{
   display: flex;
   justify-content: center;
