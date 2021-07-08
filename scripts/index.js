@@ -46,12 +46,14 @@ class Todo {
   }
   removeTaskFromPage(index,type) {
     this.deleteTaskFromList(index,type);
+    this.storeJSON();
     let toRemoveDiv = document.querySelectorAll(`div[index='${index}'][type='${type}']`)[0];
     toRemoveDiv.remove();
   }
   finishTask(index) {
     this.completed.push(this.uncompleted[index]);
     this.deleteTaskFromList(index,'uncompleted');
+    this.storeJSON();
     this.addFilter(this.currentFitler);
   }
   removeTasksFromPage() {
@@ -80,9 +82,21 @@ class Todo {
     let __json = {'uncompleted':this.uncompleted,'completed':this.completed};
     return __json;
   }
+  storeJSON() {
+    let list = this.convertIntoJSON();
+    localStorage.setItem('todo', JSON.stringify(list));
+  }
 }
 
-let todo = new Todo();
+// CHECK FOR THE EXISTENCE OF OLD TODO IN THE LOCAL STORAGE ::
+if (localStorage.getItem('todo') != null) {
+  var list = JSON.parse(localStorage.getItem('todo'));
+} else {
+  var list = {'uncompleted':[],'completed':[]}
+}
+
+// INITIATE THE APPLICATION ::
+let todo = new Todo(list['uncompleted'], list['completed']);
 tasksStatusSelect.value = 'all';
 todo.addFilter(todo.currentFitler);
 
