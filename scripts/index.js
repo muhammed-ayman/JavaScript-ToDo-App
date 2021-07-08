@@ -10,6 +10,7 @@ class Todo {
   constructor(uncompleted=[],completed=[]) {
     this.uncompleted = uncompleted;
     this.completed = completed;
+    this.currentFitler = 'all';
   }
   addTaskToList(content) {
     this.uncompleted.push(content);
@@ -51,7 +52,7 @@ class Todo {
   finishTask(index) {
     this.completed.push(this.uncompleted[index]);
     this.deleteTaskFromList(index,'uncompleted');
-    this.removeTaskFromPage(index,'uncompleted');
+    this.addFilter(this.currentFitler);
   }
   removeTasksFromPage() {
     todoList.innerHTML = '';
@@ -82,7 +83,8 @@ class Todo {
 }
 
 let todo = new Todo();
-todo.addFilter(tasksStatusSelect.value);
+tasksStatusSelect.value = 'all';
+todo.addFilter(todo.currentFitler);
 
 // EVENTS ::
 todoInputButton.addEventListener('click', function() {
@@ -99,5 +101,6 @@ todoInputButton.addEventListener('click', function() {
 });
 
 tasksStatusSelect.addEventListener('change', function() {
+  todo.currentFitler = tasksStatusSelect.value;
   todo.addFilter(tasksStatusSelect.value);
 });
