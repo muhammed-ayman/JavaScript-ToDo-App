@@ -7,7 +7,7 @@ const todoPaginationUl = document.getElementById('todo-pagination-ul');
 
 // TODO CLASS ::
 class Todo {
-  constructor(uncompleted,completed) {
+  constructor(uncompleted=[],completed=[]) {
     this.uncompleted = uncompleted;
     this.completed = completed;
   }
@@ -37,10 +37,14 @@ class Todo {
     const todoItemTrashBtn = document.createElement('button');
     todoItemTrashBtn.setAttribute('class','trash-btn');
     todoItemTrashBtn.innerHTML = '<li class="fa fa-trash"></li>';
+    todoItemTrashBtn.addEventListener('click',function() {
+      todo.removeTaskFromPage(index,type);
+    });
     todoItemDiv.appendChild(todoItemTrashBtn);
     todoList.insertBefore(todoItemDiv, todoList.childNodes[0]);
   }
   removeTaskFromPage(index,type) {
+    this.deleteTaskFromList(index,type);
     let toRemoveDiv = document.querySelectorAll(`div[index='${index}'][type='${type}']`)[0];
     toRemoveDiv.remove();
   }
@@ -52,8 +56,48 @@ class Todo {
   removeTasksFromPage() {
     todoList.innerHTML = '';
   }
+  addFilter(filter) {
+    this.removeTasksFromPage();
+    if (filter == 'all') {
+      for (var i = 0; i < this.completed.length; i++) {
+        this.addTaskToPage(i,'completed');
+      }
+      for (var i = 0; i < this.uncompleted.length; i++) {
+        this.addTaskToPage(i,'uncompleted');
+      }
+    } else if (filter == 'uncompleted') {
+      for (var i = 0; i < this.uncompleted.length; i++) {
+        this.addTaskToPage(i,'uncompleted');
+      }
+    } else {
+      for (var i = 0; i < this.completed.length; i++) {
+        this.addTaskToPage(i,'completed');
+      }
+    }
+  }
   convertIntoJSON() {
     let __json = {'uncompleted':this.uncompleted,'completed':this.completed};
     return __json;
   }
 }
+
+let todo = new Todo();
+todo.addFilter(tasksStatusSelect.value);
+
+// EVENTS ::
+todoInputButton.addEventListener('click', function() {
+  if (todoInput.value.trim().length > 0) {
+    todo.addTaskToList(todoInput.value.trim());
+    if (tasksStatusSelect.value == 'completed') {
+      tasksStatusSelect.value = 'uncompleted';
+      todo.addFilter('uncompleted');
+    } else {
+      todo.addTaskToPage(todo.uncompleted.length-1,'uncompleted');
+    }
+    todoInput.value = '';
+  }
+});
+
+tasksStatusSelect.addEventListener('change', function() {
+  todo.addFilter(tasksStatusSelect.value);
+});
