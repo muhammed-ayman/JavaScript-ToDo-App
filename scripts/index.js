@@ -43,6 +43,7 @@ class Todo {
     });
     todoItemDiv.appendChild(todoItemTrashBtn);
     todoList.insertBefore(todoItemDiv, todoList.childNodes[0]);
+    this.storeJSON();
   }
   removeTaskFromPage(index,type) {
     this.deleteTaskFromList(index,type);
