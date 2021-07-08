@@ -1,151 +1,59 @@
-import {paginate,showPage, removePaginationBtns} from './pagination.js';
-
-// CONSTANTS ::
-const elementsPerPage = 4;
-const paginationUlId = 'todo-pagination-ul';
-const todoItemSelector = '.todo-item';
+// GENERAL CONSTANTS ::
 const todoInput = document.getElementById('todo-input');
-const todoBtn = document.getElementById('todo-btn');
+const todoInputButton = document.getElementById('todo-btn');
+const tasksStatusSelect = document.getElementsByClassName('tasks-status')[0];
 const todoList = document.getElementsByClassName('todo-list')[0];
-const trashBtns = document.getElementsByClassName('trash-btn');
-const statusSelectionList = document.getElementsByClassName('tasks-status')[0];
+const todoPaginationUl = document.getElementById('todo-pagination-ul');
 
-// GENERAL VARIABLES ::
-let tasks = {"completed":[],"uncompleted":[]}
-let currentFilter = 'all';
-window.tasks = tasks;
-
-// INITIATE ::
-paginate(todoItemSelector,elementsPerPage);
-showPage('1',todoItemSelector);
-
-// EVENTS ::
-todoBtn.addEventListener('click', getTodoInput);
-statusSelectionList.addEventListener('change', changeStatusOption)
-
-// FUNCTIONS ::
-function changeStatusOption() {
-  changeFilter(statusSelectionList.value);
-}
-
-
-function emptyTodoInput() {
-  todoInput.value = '';
-}
-
-function emptyTasksList() {
-  todoList.innerHTML = '';
-}
-
-function addCompletedTask(todo) {
-  const todoItemDiv = document.createElement('div');
-  todoItemDiv.setAttribute('class', 'todo-item');
-  const todoItemLi = document.createElement('li');
-  todoItemLi.innerHTML = todo;
-  const todoItemTrashBtn = document.createElement('button');
-  todoItemTrashBtn.setAttribute('class','trash-btn');
-  todoItemTrashBtn.innerHTML = '<li class="fa fa-trash"></li>';
-  todoItemTrashBtn.addEventListener('click', function() {
-    deleteCompletedTask(event);
-  });
-  todoItemDiv.appendChild(todoItemLi);
-  todoItemDiv.appendChild(todoItemTrashBtn);
-  todoList.insertBefore(todoItemDiv, todoList.childNodes[0]);
-  paginate(todoItemSelector,elementsPerPage);
-  showPage('1',todoItemSelector);
-}
-
-function addTask(todo) {
-  const todoItemDiv = document.createElement('div');
-  todoItemDiv.setAttribute('class', 'todo-item');
-  const todoItemLi = document.createElement('li');
-  todoItemLi.innerHTML = todo;
-  const todoItemCheckBtn = document.createElement('button');
-  todoItemCheckBtn.setAttribute('class','check-btn');
-  todoItemCheckBtn.innerHTML = '<li class="fa fa-check"></li>';
-  todoItemCheckBtn.addEventListener('click', function() {
-    finishTask(event);
-  });
-  const todoItemTrashBtn = document.createElement('button');
-  todoItemTrashBtn.setAttribute('class','trash-btn');
-  todoItemTrashBtn.innerHTML = '<li class="fa fa-trash"></li>';
-  todoItemTrashBtn.addEventListener('click', function() {
-    deleteTask(event);
-  });
-  todoItemDiv.appendChild(todoItemLi);
-  todoItemDiv.appendChild(todoItemCheckBtn);
-  todoItemDiv.appendChild(todoItemTrashBtn);
-  todoList.insertBefore(todoItemDiv, todoList.childNodes[0]);
-  paginate(todoItemSelector,elementsPerPage);
-  showPage('1',todoItemSelector);
-}
-
-function deleteCompletedTask(e) {
-  for (var i = 0; i < todoList.childNodes.length; i++) {
-    if (todoList.childNodes[i] == e.target.parentNode) {
-      tasks['completed'].splice(tasks['completed'].length-1-i,1);
-      e.target.parentNode.remove();
-      paginate(todoItemSelector,elementsPerPage);
-      showPage('1',todoItemSelector);
-      break;
-    }
+// TODO CLASS ::
+class Todo {
+  constructor(uncompleted,completed) {
+    this.uncompleted = uncompleted;
+    this.completed = completed;
   }
-}
-
-function deleteTask(e) {
-  for (var i = 0; i < todoList.childNodes.length; i++) {
-    if (todoList.childNodes[i] == e.target.parentNode) {
-      tasks['uncompleted'].splice(tasks['uncompleted'].length-1-i,1);
-      e.target.parentNode.remove();
-      paginate(todoItemSelector,elementsPerPage);
-      showPage('1',todoItemSelector);
-      break;
-    }
+  addTaskToList(content) {
+    this.uncompleted.push(content);
   }
-}
-
-function finishTask(e) {
-  for (var i = 0; i < todoList.childNodes.length; i++) {
-    if (todoList.childNodes[i] == e.target.parentNode) {
-      tasks['completed'].push(tasks['uncompleted'][tasks['uncompleted'].length-1-i]);
-      tasks['uncompleted'].splice(tasks['uncompleted'].length-1-i,1);
-      e.target.parentNode.remove();
-      break;
-    }
+  deleteTaskFromList(index,type) {
+    this[type].splice(index,1);
   }
-}
-
-function changeFilter(filter) {
-  statusSelectionList.value = filter;
-  emptyTasksList();
-  let uncompletedArrLength = tasks['uncompleted'].length;
-  let completedArrLength = tasks['completed'].length;
-  if (filter == 'all') {
-    for (var i = 0; i < completedArrLength; i++) {
-      addCompletedTask(tasks['completed'][i]);
+  addTaskToPage(index,type) {
+    const todoItemDiv = document.createElement('div');
+    todoItemDiv.setAttribute('class', 'todo-item');
+    todoItemDiv.setAttribute('type', type);
+    todoItemDiv.setAttribute('index', index);
+    const todoItemLi = document.createElement('li');
+    todoItemLi.innerHTML = this[type][index];
+    todoItemDiv.appendChild(todoItemLi);
+    if (type == 'uncompleted') {
+      const todoItemCheckBtn = document.createElement('button');
+      todoItemCheckBtn.setAttribute('class','check-btn');
+      todoItemCheckBtn.innerHTML = '<li class="fa fa-check"></li>';
+      todoItemCheckBtn.addEventListener('click',function() {
+        todo.finishTask(index);
+      });
+      todoItemDiv.appendChild(todoItemCheckBtn);
     }
-    for (var i = 0; i < uncompletedArrLength; i++) {
-      addTask(tasks['uncompleted'][i]);
-    }
-  } else if (filter == 'uncompleted'){
-    for (var i = 0; i < uncompletedArrLength; i++) {
-      addTask(tasks['uncompleted'][i]);
-    }
-  } else {
-    for (var i = 0; i < completedArrLength; i++) {
-      addCompletedTask(tasks['completed'][i]);
-    }
+    const todoItemTrashBtn = document.createElement('button');
+    todoItemTrashBtn.setAttribute('class','trash-btn');
+    todoItemTrashBtn.innerHTML = '<li class="fa fa-trash"></li>';
+    todoItemDiv.appendChild(todoItemTrashBtn);
+    todoList.insertBefore(todoItemDiv, todoList.childNodes[0]);
   }
-}
-
-function getTodoInput() {
-  if (todoInput.value.trim().length > 0){
-    tasks['uncompleted'].push(todoInput.value.trim());
-    emptyTodoInput();
+  removeTaskFromPage(index,type) {
+    let toRemoveDiv = document.querySelectorAll(`div[index='${index}'][type='${type}']`)[0];
+    toRemoveDiv.remove();
   }
-  if (currentFilter != 'uncompleted') {
-    changeFilter('all');
-  } else {
-    changeFilter('uncompleted');
+  finishTask(index) {
+    this.completed.push(this.uncompleted[index]);
+    this.deleteTaskFromList(index,'uncompleted');
+    this.removeTaskFromPage(index,'uncompleted');
+  }
+  removeTasksFromPage() {
+    todoList.innerHTML = '';
+  }
+  convertIntoJSON() {
+    let __json = {'uncompleted':this.uncompleted,'completed':this.completed};
+    return __json;
   }
 }
